@@ -33,7 +33,7 @@ client.on("ready", async () => {
     ) {
       after.reverse();
       after.forEach((value) => {
-        if (!before.find((elem) => value.title === elem.title)) {
+        if (!before.find((elem) => value.url === elem.url)) {
           channelIds.forEach((id) => {
             client.channels
               .fetch(id)
