@@ -53,7 +53,11 @@ client.on("ready", async () => {
       after.forEach((value) => {
         if (!before.find((elem) => value.url === elem.url)) {
           channelList.forEach((ch) => {
-            if (ch.categories.includes(value.category)) {
+            if (
+              ch?.categories?.some(
+                (category) => category?.category === value.category
+              )
+            ) {
               client.channels.fetch(ch.channelId).then((channel) =>
                 channel
                   .send({
@@ -149,7 +153,7 @@ client.on("messageCreate", async (message) => {
         });
         message.reply(
           `**현재 알림 설정된 카테고리**\n${currentCategories[0].categories.map(
-            (data) => " `" + data.category + "`"
+            (data) => " `" + data?.category + "`"
           )}\n\n`
         );
       }
