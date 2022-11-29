@@ -13,6 +13,7 @@ interface SaleInfo {
 }
 
 const URL = "https://quasarzone.com/bbs/qb_saleinfo";
+const ORIGIN = "https://quasarzone.com";
 
 const SELECTER = {
   TABLE:
@@ -47,15 +48,22 @@ const getSaleInfo = async () => {
         $(el)
           .find(SELECTER.ROW)
           .each((_, el) => {
+            const title = $(el).find(SELECTER.TITLE).text();
+            const thumbnail = $(el).find(SELECTER.THUMBNAIL).attr("src");
+            const url = $(el).find(SELECTER.URL).attr("href");
+            const cost = $(el).find(SELECTER.COST).text();
+            const shipping = $(el).find(SELECTER.SHIPPING).text();
+            const category = $(el).find(SELECTER.CATEGORY).text();
+
             list.push({
-              title: $(el).find(SELECTER.TITLE).text(),
-              url: `https://quasarzone.co.kr${$(el)
-                .find(SELECTER.URL)
-                .attr("href")}`,
-              cost: $(el).find(SELECTER.COST).text(),
-              shipping: $(el).find(SELECTER.SHIPPING).text(),
-              category: $(el).find(SELECTER.CATEGORY).text(),
-              thumbnail: $(el).find(SELECTER.THUMBNAIL).attr("src"),
+              title,
+              url: `${ORIGIN}${url}`,
+              cost,
+              shipping,
+              category,
+              thumbnail: thumbnail?.includes("http")
+                ? thumbnail
+                : `${ORIGIN}${thumbnail}`,
             });
           });
       });
