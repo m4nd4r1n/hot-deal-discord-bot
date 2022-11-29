@@ -1,21 +1,17 @@
-import prisma from "./prisma";
-import { ChannelList } from "./types";
-
-export const getChannelList = async (): Promise<ChannelList[] | undefined> => {
-  try {
-    const channelList = await prisma.channel.findMany({
-      select: {
-        channelId: true,
-        categories: { select: { category: true } },
-        keywords: { select: { keyword: true } },
-      },
-    });
-    return channelList;
-  } catch (e) {
-    console.error(e);
-  }
-};
-
 export const sleep = (ms: number) => {
   return new Promise((r) => setTimeout(r, ms));
+};
+
+export const contains = <T extends string>(
+  list: ReadonlyArray<T>,
+  value: string
+): value is T => {
+  return list.some((item) => item === value);
+};
+
+export const every = <T extends string>(
+  origin: string[],
+  target: ReadonlyArray<T>
+): origin is T[] => {
+  return origin.every((value) => contains(target, value));
 };
