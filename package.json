@@ -16,10 +16,12 @@
     "cheerio": "^1.0.0-rc.12",
     "discord.js": "^14.6.0",
     "dotenv": "^16.0.3",
+    "node-cron": "^3.0.2",
     "puppeteer": "^19.3.0"
   },
   "devDependencies": {
     "@types/node": "^18.11.9",
+    "@types/node-cron": "^3.0.6",
     "nodemon": "^2.0.20",
     "prisma": "^4.6.1",
     "ts-node": "^10.9.1",
