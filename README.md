@@ -2,8 +2,8 @@
 
 ![version](https://img.shields.io/github/package-json/v/m4nd4r1n/quasarzone-discord-bot?style=flat-square)
 
-![badge](https://img.shields.io/github/package-json/dependency-version/m4nd4r1n/quasarzone-discord-bot/cheerio)
-![badge](https://img.shields.io/github/package-json/dependency-version/m4nd4r1n/quasarzone-discord-bot/discord.js)
+![badge](https://img.shields.io/github/package-json/dependency-version/m4nd4r1n/quasarzone-discord-bot/cheerio?style=flat-square)
+![badge](https://img.shields.io/github/package-json/dependency-version/m4nd4r1n/quasarzone-discord-bot/discord.js?style=flat-square)
 
 ![badge](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white&style=flat-square)
 ![badge](https://img.shields.io/badge/.ENV-ECD53F?logo=.env&logoColor=white&style=flat-square)
