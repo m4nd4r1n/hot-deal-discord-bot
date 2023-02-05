@@ -1,5 +1,5 @@
-import type { ChannelList } from "./types";
-import prisma from "./prisma";
+import type { TChannelList } from "./types/index.js";
+import prisma from "./prisma/client.js";
 
 export const channelList: ChannelList[] = [];
 
