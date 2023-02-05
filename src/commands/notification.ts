@@ -1,8 +1,9 @@
 import type { Message } from "discord.js";
-import { channelIdList } from "../channelIdList";
-import { updateChannelList } from "../channelList";
-import { CATEGORIES, RESPONSE_MESSAGE_MAP } from "../constants";
-import prisma from "../prisma";
+import { channelIdList } from "../channelIdList.js";
+import { updateChannelList } from "../channelList.js";
+import { CATEGORIES } from "../constants/category.js";
+import { RESPONSE_MESSAGE_MAP } from "../constants/message.js";
+import prisma from "../prisma/client.js";
 
 const setNotify = async (message: Message<boolean>) => {
   if (channelIdList.includes(message.channelId)) {

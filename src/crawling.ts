@@ -1,16 +1,9 @@
 import { load } from "cheerio";
 import puppeteer from "puppeteer";
 
-import { sleep } from "./utils";
-
-interface SaleInfo {
-  title: string;
-  url: string;
-  cost: string;
-  shipping: string;
-  category: string;
-  thumbnail?: string;
-}
+import { sleep } from "./utils.js";
+import os from "os";
+import type { TSaleInfo } from "./types/index.js";
 
 const URL = "https://quasarzone.com/bbs/qb_saleinfo";
 const ORIGIN = "https://quasarzone.com";
@@ -29,9 +22,12 @@ const SELECTER = {
 } as const;
 
 const getSaleInfo = async () => {
-  const list: SaleInfo[] = [];
+  const list: TSaleInfo[] = [];
   try {
-    const browser = await puppeteer.launch({});
+    const browser = await puppeteer.launch({
+      args: ["--no-sandbox", "--incognito"],
+      userDataDir: os.devNull,
+    });
     const page = await browser.newPage();
     await page.setUserAgent(
       "Mozilla/5.0 (Windows NT 5.1; rv:5.0) Gecko/20100101 Firefox/5.0"

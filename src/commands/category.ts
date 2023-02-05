@@ -1,13 +1,11 @@
 import type { Message } from "discord.js";
-import { channelIdList } from "../channelIdList";
-import { updateChannelList } from "../channelList";
-import {
-  CATEGORIES,
-  CATEGORY_COMMANDS,
-  RESPONSE_MESSAGE_MAP,
-} from "../constants";
-import prisma from "../prisma";
-import { contains, every } from "../utils";
+import { channelIdList } from "../channelIdList.js";
+import { updateChannelList } from "../channelList.js";
+import { CATEGORIES } from "../constants/category.js";
+import { RESPONSE_MESSAGE_MAP } from "../constants/message.js";
+import prisma from "../prisma/client.js";
+import { contains, every } from "../utils.js";
+import { CATEGORY_COMMANDS } from "../constants/commands.js";
 
 const category = async (message: Message<boolean>, args: string[] = []) => {
   if (!channelIdList.includes(message.channelId)) {
