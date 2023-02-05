@@ -1,7 +1,7 @@
 import type { TChannelList } from "./types/index.js";
 import prisma from "./prisma/client.js";
 
-export const channelList: ChannelList[] = [];
+export const channelList: TChannelList[] = [];
 
 export const updateChannelList = async () => {
   const newChannelList = await getChannelList();
@@ -10,7 +10,7 @@ export const updateChannelList = async () => {
   channelList.push(...newChannelList);
 };
 
-const getChannelList = async (): Promise<ChannelList[] | undefined> => {
+const getChannelList = async (): Promise<TChannelList[] | undefined> => {
   try {
     const channelList = await prisma.channel.findMany({
       select: {
