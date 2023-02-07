@@ -73,7 +73,8 @@ discord.on("ready", async () => {
 
 discord.on("messageCreate", async (message) => {
   if (message.author.bot) return;
-  if (message.content.slice(0, PREFIX.length) !== PREFIX) return;
+  if (/^\/{1}\b/g.test(message.content)) return;
+
   const args = message.content.slice(PREFIX.length).split(" ");
   const command = args.shift()?.toLowerCase();
   if (!command) return;
