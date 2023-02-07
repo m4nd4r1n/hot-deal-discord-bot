@@ -21,7 +21,14 @@ const REDIS_KEY = "LIST";
 const DISCORD_TOKEN = NODE_ENV === "development" ? TEST_BOT_TOKEN : BOT_TOKEN;
 
 const discord = new Discord.Client({
-  intents: ["Guilds", "GuildMessages", "MessageContent"],
+  intents: [
+    "Guilds",
+    "GuildMessages",
+    "MessageContent",
+    "DirectMessages",
+    "DirectMessageTyping",
+  ],
+  partials: [Discord.Partials.Channel],
 });
 
 discord.on("ready", async () => {
