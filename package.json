@@ -22,6 +22,7 @@
     "node": ">=18"
   },
   "devDependencies": {
+    "@repo/eslint-config": "workspace:^",
     "turbo": "^1.10.16"
   }
 }
