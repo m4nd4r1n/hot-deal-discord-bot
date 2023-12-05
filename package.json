@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
+    "prepare": "husky install",
     "format": "prettier --write --cache \"**/*.{js,ts,tsx,css,md}\"",
     "web": "pnpm -F web",
     "bot": "pnpm -F bot",
@@ -23,8 +24,11 @@
     "node": ">=18"
   },
   "devDependencies": {
+    "@commitlint/cli": "^18.4.3",
+    "@commitlint/config-conventional": "^18.4.3",
     "@repo/eslint-config": "workspace:^",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "husky": "^8.0.3",
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.7",
     "turbo": "^1.10.16"
