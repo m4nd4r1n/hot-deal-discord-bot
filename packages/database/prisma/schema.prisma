@@ -1,0 +1,44 @@
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Channel {
+  id          String   @id @default(cuid())
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  webhook_url String   @unique
+
+  subscribed_categories Category[]
+}
+
+model Category {
+  id         String  @id @default(cuid())
+  channel_id String?
+  category   String  @unique
+
+  Channel Channel? @relation(fields: [channel_id], references: [id])
+  Post    Post[]
+
+  @@index([channel_id])
+}
+
+model Post {
+  id            String   @id @default(cuid())
+  created_at    DateTime @default(now())
+  title         String   @db.Text
+  url           String   @db.Text
+  cost          String   @db.Text
+  shipping      String   @db.Text
+  category_id   String
+  thumbnail_url String?  @db.Text
+
+  category Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
+  @@index([category_id])
+}

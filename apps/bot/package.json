@@ -1,0 +1,25 @@
+{
+  "name": "bot",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "dotenv -c development -- tsx watch src/index.ts",
+    "build": "dotenv -c production -- tsup-node",
+    "lint": "eslint . --max-warnings 0",
+    "start": "dotenv -c production -- node dist/index.js"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:^",
+    "@repo/typescript-config": "workspace:^",
+    "@types/node": "^20",
+    "dotenv-cli": "^7.3.0",
+    "eslint": "^8",
+    "tsup": "^8.0.1",
+    "tsx": "^4.6.2",
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@repo/database": "workspace:^"
+  },
+  "type": "module"
+}
