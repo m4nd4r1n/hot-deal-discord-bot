@@ -3,6 +3,11 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
+    "web": "pnpm -F web",
+    "bot": "pnpm -F bot",
+    "db": "pnpm -F database",
+    "tc": "pnpm -F typescript-config",
+    "ec": "pnpm -F eslint-config",
   },
   "packageManager": "pnpm@8.11.0",
   "engines": {
