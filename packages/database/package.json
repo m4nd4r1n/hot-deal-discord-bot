@@ -1,0 +1,36 @@
+{
+  "name": "@repo/database",
+  "version": "2.0.0",
+  "private": true,
+  "main": "./dist/client.js",
+  "module": "./dist/client.mjs",
+  "types": "./dist/client.d.ts",
+  "scripts": {
+    "db:migrate:deploy": "dotenv -c production -- prisma migrate deploy",
+    "db:migrate:dev": "dotenv -c development -- prisma migrate dev",
+    "db:push": "dotenv -c development -- prisma db push --skip-generate",
+    "db:seed:dev": "dotenv -c development -- tsx src/seed.ts",
+    "db:seed:prod": "dotenv -c production -- tsx src/seed.ts",
+    "db:generate": "prisma generate",
+    "studio:dev": "dotenv -c development -- prisma studio",
+    "studio:prod": "dotenv -c production -- prisma studio",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prisma format",
+    "build": "tsup src/client.ts --format cjs,esm --dts",
+    "dev": "npm run build -- --watch"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:^",
+    "@repo/typescript-config": "workspace:^",
+    "@types/node": "^20",
+    "dotenv-cli": "^7.3.0",
+    "eslint": "^8",
+    "prisma": "^5.6.0",
+    "tsup": "^8.0.1",
+    "tsx": "^4.6.2",
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.6.0"
+  }
+}
