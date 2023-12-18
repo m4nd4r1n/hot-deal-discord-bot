@@ -1,7 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
-  "globalEnv": ["NODE_ENV"],
+  "globalEnv": ["NODE_ENV", "BROWSER_WS_ENDPOINT"],
   "pipeline": {
     "build": {
       "dependsOn": ["^db:generate", "^build"],

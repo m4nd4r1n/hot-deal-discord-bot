@@ -19,7 +19,9 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@repo/database": "workspace:^"
+    "@repo/database": "workspace:^",
+    "cheerio": "1.0.0-rc.12",
+    "puppeteer-core": "^21.6.0"
   },
   "type": "module"
 }
