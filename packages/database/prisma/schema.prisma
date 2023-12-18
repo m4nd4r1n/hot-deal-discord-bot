@@ -23,22 +23,12 @@ model Category {
   category   String  @unique
 
   Channel Channel? @relation(fields: [channel_id], references: [id])
-  Post    Post[]
 
   @@index([channel_id])
 }
 
 model Post {
-  id            String   @id @default(cuid())
-  created_at    DateTime @default(now())
-  title         String   @db.Text
-  url           String   @db.Text
-  cost          String   @db.Text
-  shipping      String   @db.Text
-  category_id   String
-  thumbnail_url String?  @db.Text
-
-  category Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
-
-  @@index([category_id])
+  id         String   @id @default(cuid())
+  created_at DateTime @default(now())
+  url        String   @db.Text
 }
