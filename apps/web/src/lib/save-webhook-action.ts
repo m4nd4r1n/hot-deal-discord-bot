@@ -2,7 +2,7 @@
 
 import { prisma } from '@repo/database';
 
-import { type WebhookForm } from '@/lib/schema';
+import { type WebhookForm, webhookFormSchema } from '@/lib/schema';
 
 interface WebhookSubmitResponse {
   success: boolean;
@@ -10,6 +10,9 @@ interface WebhookSubmitResponse {
 }
 
 export const handleWebhookSubmit = async (values: WebhookForm): Promise<WebhookSubmitResponse> => {
+  const result = webhookFormSchema.safeParse(values);
+  if (!result.success) return { success: false, message: '유효한 입력이 아닙니다.' };
+
   const { webhookUrl, categories: selectedCategory } = values;
   const isValidWebhook = await validateWebhook(webhookUrl);
   if (!isValidWebhook) return { success: false, message: '등록에 실패했습니다.' };
