@@ -7,7 +7,7 @@ export const CATEGORIES = Object.freeze([
   '생활/식품',
   '패션/의류',
   '기타',
-]);
+] as const);
 
 export const ITEMS = Object.freeze(
   CATEGORIES.map((category) => ({ id: category, label: category })),
