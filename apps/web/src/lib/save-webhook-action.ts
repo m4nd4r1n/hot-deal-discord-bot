@@ -1,30 +1,27 @@
 'use server';
 
-import * as z from 'zod';
 import { prisma } from '@repo/database';
 
-import { formSchema } from '@/lib/schema';
+import { type WebhookForm } from '@/lib/schema';
 
-interface SaveWebhookResponse {
+interface WebhookSubmitResponse {
   success: boolean;
   message: string;
 }
 
-export const saveWebhook = async (
-  values: z.infer<typeof formSchema>,
-): Promise<SaveWebhookResponse> => {
+export const handleWebhookSubmit = async (values: WebhookForm): Promise<WebhookSubmitResponse> => {
   const { webhookUrl, categories: selectedCategory } = values;
   const isValidWebhook = await validateWebhook(webhookUrl);
   if (!isValidWebhook) return { success: false, message: '등록에 실패했습니다.' };
+
   const categories = makeCategoryStructure(selectedCategory);
   const isExist = await findWebhook(webhookUrl);
-
   if (isExist) {
     await updateWebhook(webhookUrl, categories);
-    return { success: true, message: '업데이트 되었습니다.' };
+    return { success: true, message: '카테고리가 업데이트되었습니다.' };
   }
-  await saveWebhookToDB(webhookUrl, categories);
-  return { success: true, message: '등록에 성공했습니다.' };
+  await saveWebhook(webhookUrl, categories);
+  return { success: true, message: '등록되었습니다.' };
 };
 
 const validateWebhook = async (webhookUrl: string) => {
@@ -44,7 +41,7 @@ const findWebhook = (webhookUrl: string) =>
     where: { webhook_url: webhookUrl },
   });
 
-const makeCategoryStructure = (categories: string[]) =>
+const makeCategoryStructure = <T extends string>(categories: T[]) =>
   categories.map((category) => ({ category }));
 
 const updateWebhook = (webhookUrl: string, categories: { category: string }[]) =>
@@ -53,7 +50,7 @@ const updateWebhook = (webhookUrl: string, categories: { category: string }[]) =
     where: { webhook_url: webhookUrl },
   });
 
-const saveWebhookToDB = (webhookUrl: string, categories: { category: string }[]) =>
+const saveWebhook = (webhookUrl: string, categories: { category: string }[]) =>
   prisma.channel.create({
     data: { subscribed_categories: { connect: categories }, webhook_url: webhookUrl },
   });
