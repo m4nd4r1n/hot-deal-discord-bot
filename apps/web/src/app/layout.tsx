@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
-import { Inter as FontSans } from 'next/font/google';
+import LocalFont from 'next/font/local';
 
 import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 
 import './globals.css';
 
-const fontSans = FontSans({
-  subsets: ['latin'],
+const fontSans = LocalFont({
+  src: '../../public/fonts/PretendardVariable.woff2',
   variable: '--font-sans',
 });
 
@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body
         className={cn(
           'bg-background mx-auto min-h-screen max-w-screen-md p-4 font-sans antialiased',
-          fontSans.className,
+          fontSans.variable,
         )}
       >
         {children}
