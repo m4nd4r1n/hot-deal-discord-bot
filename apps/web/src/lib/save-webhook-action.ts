@@ -3,29 +3,36 @@
 import { prisma } from '@repo/database';
 
 import { type WebhookForm, webhookFormSchema } from '@/lib/schema';
+import { wrapTryCatch } from '@/lib/utils';
 
 interface WebhookSubmitResponse {
   success: boolean;
   message: string;
 }
 
-export const handleWebhookSubmit = async (values: WebhookForm): Promise<WebhookSubmitResponse> => {
-  const result = webhookFormSchema.safeParse(values);
-  if (!result.success) return { success: false, message: '유효한 입력이 아닙니다.' };
+export const handleWebhookSubmit = wrapTryCatch(
+  async (values: WebhookForm): Promise<WebhookSubmitResponse> => {
+    const result = webhookFormSchema.safeParse(values);
+    if (!result.success) return { success: false, message: '유효한 입력이 아닙니다.' };
 
-  const { webhookUrl, categories: selectedCategory } = values;
-  const isValidWebhook = await validateWebhook(webhookUrl);
-  if (!isValidWebhook) return { success: false, message: '등록에 실패했습니다.' };
+    const { webhookUrl, categories: selectedCategory } = values;
+    const isValidWebhook = await validateWebhook(webhookUrl);
+    if (!isValidWebhook) return { success: false, message: '등록에 실패했습니다.' };
 
-  const categories = makeCategoryStructure(selectedCategory);
-  const isExist = await findWebhook(webhookUrl);
-  if (isExist) {
-    await updateWebhook(webhookUrl, categories);
-    return { success: true, message: '카테고리가 업데이트되었습니다.' };
-  }
-  await saveWebhook(webhookUrl, categories);
-  return { success: true, message: '등록되었습니다.' };
-};
+    const categories = makeCategoryStructure(selectedCategory);
+    const isExist = await findWebhook(webhookUrl);
+    if (isExist) {
+      await updateWebhook(webhookUrl, categories);
+      return { success: true, message: '카테고리가 업데이트되었습니다.' };
+    }
+    await saveWebhook(webhookUrl, categories);
+    return { success: true, message: '등록되었습니다.' };
+  },
+  (e): WebhookSubmitResponse => {
+    console.error(e);
+    return { success: false, message: '등록에 실패했습니다.' };
+  },
+);
 
 const validateWebhook = async (webhookUrl: string) => {
   let res: Response;
