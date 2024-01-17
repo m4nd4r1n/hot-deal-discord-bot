@@ -1,16 +1,17 @@
 import cron from 'node-cron';
 
-import { getNewPosts, savePosts } from '@/post';
-import { sendMessage } from '@/send';
+import { createPostUrlArray, getNewPosts, loadPosts, savePosts } from '@/post';
+import { scrapeHotDeals } from '@/scrape';
+import { loadWebhooks, sendMessage } from '@/webhook';
 
 const run = async () => {
   try {
-    const [newPosts, posts] = await getNewPosts();
+    const [prevPosts, posts] = await Promise.all([loadPosts(), scrapeHotDeals()]);
+    const newPosts = getNewPosts(prevPosts, posts);
     if (!newPosts.length) return;
 
-    const postUrls = posts.map(({ url }) => ({ url }));
-
-    await Promise.all([sendMessage(newPosts), savePosts(postUrls)]);
+    const webhooks = await loadWebhooks();
+    await Promise.all([sendMessage(newPosts, webhooks), savePosts(createPostUrlArray(posts))]);
   } catch (e) {
     console.error(e);
   }
