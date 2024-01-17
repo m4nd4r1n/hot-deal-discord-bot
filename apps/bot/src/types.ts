@@ -1,4 +1,4 @@
-export type HotDeal = {
+export type Post = {
   title: string;
   url: string;
   cost: string;
@@ -6,6 +6,7 @@ export type HotDeal = {
   category: string;
   thumbnail: string;
 };
+
 export type Embed = {
   title: string;
   url: string;
@@ -20,3 +21,7 @@ export type WebhookBody = {
   avatar_url: string;
   embeds: Embed[];
 };
+
+export type Webhook = { webhook_url: string; subscribed_categories: { category: string }[] };
+
+export type PostUrl = Pick<Post, 'url'>;

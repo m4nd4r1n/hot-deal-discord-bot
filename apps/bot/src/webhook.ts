@@ -1,22 +1,11 @@
 import { prisma } from '@repo/database';
 
-import type { Embed, HotDeal, WebhookBody } from '@/types';
+import type { Embed, Post, Webhook, WebhookBody } from '@/types';
 
-export const sendMessage = async (newPosts: HotDeal[]) => {
-  const webhooks = await loadWebhooks();
-  const executes = createWebhookExecutes(newPosts, webhooks);
-  await Promise.all(executes);
-};
+export const sendMessage = (newPosts: Post[], webhooks: Webhook[]) =>
+  Promise.all(createWebhookExecutes(newPosts, webhooks));
 
-const loadWebhooks = () =>
-  prisma.channel.findMany({
-    select: { webhook_url: true, subscribed_categories: { select: { category: true } } },
-  });
-
-const createWebhookExecutes = (
-  posts: HotDeal[],
-  webhooks: Awaited<ReturnType<typeof loadWebhooks>>,
-) => {
+const createWebhookExecutes = (posts: Post[], webhooks: Webhook[]) => {
   const executes: Promise<Response>[] = [];
 
   posts.forEach((saleInfo) => {
@@ -39,14 +28,7 @@ const createWebhookBody = (embed: Embed): WebhookBody => ({
   embeds: [embed],
 });
 
-const createEmbedObject = ({
-  url,
-  category,
-  thumbnail,
-  shipping,
-  title,
-  cost,
-}: HotDeal): Embed => ({
+const createEmbedObject = ({ url, category, thumbnail, shipping, title, cost }: Post): Embed => ({
   title,
   url,
   color: EMBED_COLOR,
@@ -60,6 +42,11 @@ const executeWebhook = (url: string, body: WebhookBody) =>
     body: JSON.stringify(body),
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+  });
+
+export const loadWebhooks = () =>
+  prisma.channel.findMany({
+    select: { webhook_url: true, subscribed_categories: { select: { category: true } } },
   });
 
 const EMBED_COLOR = 0xff9726;

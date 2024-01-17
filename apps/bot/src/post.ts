@@ -1,23 +1,22 @@
 import { prisma } from '@repo/database';
 
-import { scrapeHotDeals } from '@/scrape';
+import type { Post, PostUrl } from '@/types';
 
-export const savePosts = (postUrls: { url: string }[]) =>
+export const savePosts = (postUrls: PostUrl[]) =>
   prisma.$transaction([prisma.post.deleteMany(), prisma.post.createMany({ data: postUrls })]);
 
-export const getNewPosts = async () => {
-  const [prevPosts, posts] = await Promise.all([loadPosts(), scrapeHotDeals()]);
-  const postUrlMap = createPostUrlMap(prevPosts);
-  const newPosts = posts.filter(({ url }) => !postUrlMap.get(url));
-  return [newPosts, posts] as const;
-};
+export const getNewPosts = (prevPosts: PostUrl[], posts: Post[]) =>
+  filterPostsByUrlMap(posts, createPostUrlMap(prevPosts));
 
-const loadPosts = () => prisma.post.findMany({ select: { url: true } });
+const createPostUrlMap = (post: PostUrl[]) =>
+  post.reduce((map, { url }) => {
+    map.set(url, true);
+    return map;
+  }, new Map<string, boolean>());
 
-const createPostUrlMap = (posts: { url: string }[]) => {
-  const postUrlMap = new Map<string, boolean>();
-  posts.forEach(({ url }) => {
-    postUrlMap.set(url, true);
-  });
-  return postUrlMap;
-};
+const filterPostsByUrlMap = (posts: Post[], postUrlMap: Map<string, boolean>) =>
+  posts.filter(({ url }) => !postUrlMap.get(url));
+
+export const loadPosts = () => prisma.post.findMany({ select: { url: true } });
+
+export const createPostUrlArray = (posts: Post[]): PostUrl[] => posts.map(({ url }) => ({ url }));

@@ -1,12 +1,9 @@
 import { load } from 'cheerio';
 import puppeteer from 'puppeteer-core';
 
-import type { HotDeal } from '@/types';
+import type { Post } from '@/types';
 
-export const scrapeHotDeals = async () => {
-  const html = await getHTML(DEST_URL);
-  return parseHotDealList(html);
-};
+export const scrapeHotDeals = async () => parseHotDealList(await getHTML(DEST_URL));
 
 const getHTML = async (dest: string) => {
   const browser = await puppeteer.connect({
@@ -27,7 +24,7 @@ const getHTML = async (dest: string) => {
 const parseHotDealList = (html: string) => {
   const origin = new URL(DEST_URL).origin;
   const $ = load(html);
-  const hotDeals: HotDeal[] = [];
+  const hotDeals: Post[] = [];
 
   $(SELECTOR.ROW).each((_, el) => {
     const title = $(el).find(SELECTOR.TITLE).text();
