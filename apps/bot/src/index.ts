@@ -2,7 +2,13 @@ import cron from 'node-cron';
 
 import { createPostUrlArray, getNewPosts, loadPosts, savePosts } from '@/post';
 import { scrapeHotDeals } from '@/scrape';
-import { loadWebhooks, sendMessage } from '@/webhook';
+import {
+  deleteWebhooksByUrls,
+  distinguishWebhooks,
+  getWebhookResponses,
+  loadWebhooks,
+  sendMessage,
+} from '@/webhook';
 
 const run = async () => {
   try {
@@ -11,7 +17,13 @@ const run = async () => {
     if (!newPosts.length) return;
 
     const webhooks = await loadWebhooks();
-    await Promise.all([sendMessage(newPosts, webhooks), savePosts(createPostUrlArray(posts))]);
+    const webhookResponses = await getWebhookResponses(webhooks);
+    const [enabledWebhooks, disabledWebhookUrls] = distinguishWebhooks(webhooks, webhookResponses);
+    await Promise.all([
+      sendMessage(newPosts, enabledWebhooks),
+      savePosts(createPostUrlArray(posts)),
+      deleteWebhooksByUrls(disabledWebhookUrls),
+    ]);
   } catch (e) {
     console.error(e);
   }
